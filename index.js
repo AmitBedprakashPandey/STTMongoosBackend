@@ -45,7 +45,7 @@ app.use("/api/process", verifyToken , ProcessRoute);
 app.use("/api/state", verifyToken , StateRoute);
 app.use("/api/supplier", verifyToken , SupplierRoute);
 app.use("/api/transport", verifyToken , TransportModel);
-app.use("/api/auth", verifyToken , UserRoute);
+app.use("/api/auth", UserRoute);
 app.use("/api/setup",verifyToken ,  CompanyDetailRoute);
 
 app.listen(port, () => {
