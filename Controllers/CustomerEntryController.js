@@ -1,6 +1,7 @@
 const Model = require("../Model/CustomerEntryModel");
 
 exports.create = async (req, res) => {
+  console.log(req.body);
   try {
     const statesData = req.body;
     const insertedCitys = await Model.insertMany(statesData);
@@ -48,15 +49,10 @@ exports.getById = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const cityId = req.params.id;
-  const updateData = {
-    city: req.body.city,
-    state: req.body.state,
-    active: req.body.active,
-  };
+
 
   try {
-    const updatedCity = await Model.findByIdAndUpdate(cityId, updateData, {
+    const updatedCity = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!updatedCity) {

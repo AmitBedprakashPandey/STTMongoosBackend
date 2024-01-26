@@ -1,88 +1,68 @@
 const Model = require("../Model/UserModel");
-
-exports.create = async (req, res) => {
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const Key='AmitPandey9137976758'
+// Register user
+exports.register = async (req, res) => {
   try {
-    const statesData = req.body;
-    const insertedCitys = await Model.insertMany(statesData);
+    const { email, pass } = req.body;
+    const hashedPassword = await bcrypt.hash(pass, 10);
+    const foundUser = await Model.findOne({email:email});
+    if(foundUser){
+      res.status(500).json({message:'User Already exist'})
+    }
+    const user = new Model({ email, pass: hashedPassword });
+    const inserted = await Model.create(user);
     res
       .status(200)
-      .json({ message: "City created successfully", data: insertedCitys });
+      .json({ message: "Created Successfully", token: inserted });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-exports.findAll = async (req, res) => {
+// Login user
+exports.login =async (req,res)=>{
   try {
-    const cities = await Model.find(); // Fetch all cities from the database
-    res.status(200).json(cities);
+    const {email,pass} = req.body;
+    const user = await Model.findOne({email});
+    if (!user) {
+      return res.status(401).json({ error: 'User Not found!' });
+      }
+      const passwordMatch = await bcrypt.compare(pass, user.pass);
+ if (!passwordMatch) {
+ return res.status(401).json({ error: 'Please Check Password' });
+ }
+ const token = jwt.sign({ userId: user.email }, Key, {
+  expiresIn: '1h',
+  });
+  res.status(200).json({ token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ Message: "Internal Server Error" });
+    res.status(500).json({ error: 'Login failed' });
   }
-};
-exports.findActiveCities = async (req, res) => {
-  try {
-    const activeCities = await Model.find({ active: req.params.active });
-    res.status(200).json({ data: activeCities });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ Message: "Internal Server Error" });
-  }
-};
-
-exports.getById = async (req, res) => {
-  const cityId = req.params.id;
-
-  try {
-    const city = await Model.findById(cityId);
-    if (!city) {
-      return res.status(404).json({ message: "City not found" });
-    }
-    res.status(200).json({ data: city });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
+}
+// Update user
 exports.update = async (req, res) => {
-  const cityId = req.params.id;
+  const id = req.params.id;
   const updateData = {
-    city: req.body.city,
+    data: req.body.data,
     state: req.body.state,
     active: req.body.active,
   };
 
   try {
-    const updatedCity = await Model.findByIdAndUpdate(cityId, updateData, {
+    const updateddata = await Model.findByIdAndUpdate(id, updateData, {
       new: true,
     });
-    if (!updatedCity) {
-      return res.status(404).json({ message: "City not found" });
+    if (!updateddata) {
+      return res.status(404).json({ message: "data not found" });
     }
     res
       .status(200)
-      .json({ message: "City updated successfully", data: updatedCity });
+      .json({ message: "data updated successfully", data: updateddata });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-exports.delete = async (req, res) => {
-  const cityId = req.params.id;
-  try {
-    const deletedCity = await Model.findByIdAndDelete(cityId);
-    if (!deletedCity) {
-      return res.status(404).json({ message: "City not found" });
-    }
-    res
-      .status(200)
-      .json({ message: "City deleted successfully", data: deletedCity });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};

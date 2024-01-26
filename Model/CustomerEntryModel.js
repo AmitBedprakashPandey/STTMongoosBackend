@@ -15,7 +15,7 @@ const CustomerEntrySchema = new mongoose.Schema(
     meter: Number,
     rate: Number,
     billamt:Number,
-    dueamt:Number,
+    belamt:Number,
     voucher:[]
 },
   { collection: "Company" }

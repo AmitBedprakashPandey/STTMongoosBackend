@@ -1,6 +1,6 @@
 const StateModel = require("../Model/StateModel");
 
-exports.create = async (req, res) => {
+exports.create = async (req, res) => {    
   try {
     const statesData = req.body;
     const insertedCitys = await StateModel.insertMany(statesData);

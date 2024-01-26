@@ -1,5 +1,5 @@
 const express = require('express')
-const Controller = require('../Controllers/CatagoryController');
+const Controller = require('../Controllers/QualityController');
 const Router = express.Router();
 
 Router.post('/',Controller.create);

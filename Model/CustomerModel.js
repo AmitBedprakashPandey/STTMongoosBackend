@@ -4,11 +4,14 @@ const CustomerSchema = new mongoose.Schema(
   {
     customer: String,
     category: String,
-    mobile: Number,
-    office: Number,
-    email: String,
-    city: String,
+    address:String,
     state: String,
+    city: String,
+    pincode:Number,  
+    office1: Number,
+    office2: Number,
+    mobile: Number,
+    email: String,
   },
   { collection: "Customer" }
 );

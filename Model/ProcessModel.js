@@ -4,10 +4,13 @@ const ProcessSchema = new mongoose.Schema(
   {
     process: String,
     category: String,
+    address:String,
     mobile: Number,
-    office: Number,
+    office1: Number,
+    office2: Number,
     email: String,
     city: String,
+    pincode:Number,
     state: String,
   },
   { collection: "Process" }

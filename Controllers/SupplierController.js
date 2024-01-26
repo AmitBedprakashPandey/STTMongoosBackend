@@ -2,8 +2,7 @@ const Model = require("../Model/SupplierModel");
 
 exports.create = async (req, res) => {
   try {
-    const statesData = req.body;
-    const insertedCitys = await Model.insertMany(statesData);
+    const insertedCitys = await Model.create(req.body);
     res
       .status(200)
       .json({ message: "City created successfully", data: insertedCitys });
@@ -22,6 +21,7 @@ exports.findAll = async (req, res) => {
     res.status(500).json({ Message: "Internal Server Error" });
   }
 };
+
 exports.findActiveCities = async (req, res) => {
   try {
     const activeCities = await Model.find({ active: req.params.active });
@@ -48,15 +48,8 @@ exports.getById = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  const cityId = req.params.id;
-  const updateData = {
-    city: req.body.city,
-    state: req.body.state,
-    active: req.body.active,
-  };
-
   try {
-    const updatedCity = await Model.findByIdAndUpdate(cityId, updateData, {
+    const updatedCity = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!updatedCity) {
@@ -72,9 +65,8 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const cityId = req.params.id;
   try {
-    const deletedCity = await Model.findByIdAndDelete(cityId);
+    const deletedCity = await Model.findByIdAndDelete(req.params.id);
     if (!deletedCity) {
       return res.status(404).json({ message: "City not found" });
     }

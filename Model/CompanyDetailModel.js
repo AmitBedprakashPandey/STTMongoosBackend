@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
 const CompanySchema = new mongoose.Schema(
-  { title: String,
+  { 
+    title: {type :String,require :true,unique: true},
     address: String,
     city:String,
     state:String,
     pincode:Number,
     phone:Number,
+    office:Number,
     email:String
 },
   { collection: "Company" }

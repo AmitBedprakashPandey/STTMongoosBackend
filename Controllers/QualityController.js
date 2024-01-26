@@ -1,7 +1,6 @@
-const Model = require("../Model/TransportModel");
+const Model = require("../Model/QualityModel");
 
 exports.create = async (req, res) => {
-  console.log(req.body);   
   try {
     const statesData = req.body;
     const insertedCitys = await Model.insertMany(statesData);
@@ -23,36 +22,11 @@ exports.findAll = async (req, res) => {
     res.status(500).json({ Message: "Internal Server Error" });
   }
 };
-exports.findActiveCities = async (req, res) => {
-  try {
-    const activeCities = await Model.find({ active: req.params.active });
-    res.status(200).json({ data: activeCities });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ Message: "Internal Server Error" });
-  }
-};
-
-exports.getById = async (req, res) => {
-  const cityId = req.params.id;
-
-  try {
-    const city = await Model.findById(cityId);
-    if (!city) {
-      return res.status(404).json({ message: "City not found" });
-    }
-    res.status(200).json({ data: city });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 exports.update = async (req, res) => {
   const cityId = req.params.id;
   const updateData = {
-    transport: req.body.transport,
-    shortname: req.body.shortname,
+    quality: req.body.quality
   };
 
   try {
