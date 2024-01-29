@@ -1,7 +1,7 @@
 const Model = require("../Model/CustomerEntryModel");
 
 exports.create = async (req, res) => {
-  console.log(req.body);
+
   try {
     const statesData = req.body;
     const insertedCitys = await Model.insertMany(statesData);

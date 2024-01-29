@@ -1,7 +1,6 @@
 const Model = require("../Model/ProcessModel");
 
 exports.create = async (req, res) => {
-  console.log(req.body);
   try {
     const statesData = req.body;
     const insertedCitys = await Model.create(statesData);
